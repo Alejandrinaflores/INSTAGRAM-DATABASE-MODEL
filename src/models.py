@@ -8,24 +8,57 @@ from eralchemy import render_er
 
 Base = declarative_base()
 
-class Person(Base):
-    __tablename__ = 'person'
+class User(Base):
+    __tablename__ = 'user'
     # Here we define columns for the table person
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
+    userName = Column(String(250), nullable=False)
+    name = Column(String(250))
+    lastname = Column(String(250))
+    phone_number = Column(Integer)
+    email = Column (String(250))
 
-class Address(Base):
-    __tablename__ = 'address'
+class Post(Base):
+    __tablename__ = 'post'
     # Here we define columns for the table address.
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
-    street_name = Column(String(250))
-    street_number = Column(String(250))
-    post_code = Column(String(250), nullable=False)
-    person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship(Person)
+    caption = Column(String(250), nullable=False)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
 
+class Comment(Base):
+    __tablename__ = 'comment'
+    # Here we define columns for the table address.
+    # Notice that each column is also a normal Python instance attribute.
+    id = Column(Integer, primary_key=True)
+    text = Column(String(250), nullable=False)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
+    post_id = Column(Integer, ForeignKey('post.id'))
+    post = relationship(Post)
+
+class Likes(Base):
+    __tablename__ = 'likes'
+    # Here we define columns for the table address.
+    # Notice that each column is also a normal Python instance attribute.
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
+    post_id = Column(Integer, ForeignKey('post.id'))
+    post = relationship(Post)
+    comment_id = Column(Integer, ForeignKey('comment.id'))
+    comment = relationship(Comment)
+
+class Followers(Base):
+    __tablename__ = 'Followers'
+    # Here we define columns for the table address.
+    # Notice that each column is also a normal Python instance attribute.
+    id = Column(Integer, primary_key=True)
+    follower_id = Column(Integer, ForeignKey('user.id'))
+    followers = relationship(User)
+    
     def to_dict(self):
         return {}
 
